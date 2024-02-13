@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../login/AuthContext";
-import AlertMessage from '../AlertMessage';
+import AlertMessage from "../AlertMessage";
 
 interface HolidayProps {
   holidayName: string;
@@ -13,20 +13,19 @@ export default function HolidayForm() {
   const [holiday, setHoliday] = useState<HolidayProps>({
     holidayName: "",
     holidayDateTime: "",
-
   });
 
   const navigate = useNavigate();
-  const [baseUrl, SetBaseUrl] = useState("https://thaydb.vercel.app");
+  const [baseUrl, SetBaseUrl] = useState("https://thay-db.vercel.app");
   const { token } = useAuth();
-  
-  const handleChange = (e: { target: { name: any; value: any; }; }) => {
+
+  const handleChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
     setHoliday({ ...holiday, [name]: value });
   };
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
   const [errorMsg, setErrorMsg] = useState<Record<string, string>>({});
-  const [successMessage, setSuccessMessage] = useState<string>('');
+  const [successMessage, setSuccessMessage] = useState<string>("");
 
   const hasValidationErrors = () => {
     const errors: Record<string, string> = {};
@@ -35,9 +34,9 @@ export default function HolidayForm() {
     } else if (holiday.holidayName.trim().length <= 4) {
       errors.holidayName = "Name must have more than 4 letters";
     } else if (!/^[a-zA-Z. ]+$/.test(holiday.holidayName)) {
-      errors.holidayName = "Name must be uppercase letter, lowercase letters only";
+      errors.holidayName =
+        "Name must be uppercase letter, lowercase letters only";
     }
-
 
     if (!holiday.holidayDateTime.trim()) {
       errors.holidayDateTime = "Date cannot be empty";
@@ -54,17 +53,17 @@ export default function HolidayForm() {
       console.log("Validation errors. Form not submitted.");
     } else {
       axios
-        .post(`${baseUrl}/api/holiday/`, holiday,
-        { headers: {
-          Authorization: `Bearer ${token}`
-        }})
+        .post(`${baseUrl}/api/holiday/`, holiday, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
         .then((res) => {
           console.log(res);
-          setSuccessMessage('Holiday registered successfully.'); 
+          setSuccessMessage("Holiday registered successfully.");
           setTimeout(() => {
             navigate("/DisplayHolidays");
           }, 2000);
-          
         })
         .catch((err) => console.log(err));
     }
@@ -74,16 +73,18 @@ export default function HolidayForm() {
   };
 
   useEffect(() => {
-    SetBaseUrl("https://thaydb.vercel.app");
+    SetBaseUrl("https://thay-db.vercel.app");
     setIsSubmitDisabled(hasValidationErrors());
   }, [holiday]);
 
   return (
-    <div className="container border rounded p-4 mt-5 " style={{ backgroundColor:'white' }}>
+    <div
+      className="container border rounded p-4 mt-5 "
+      style={{ backgroundColor: "white" }}
+    >
       <h3 className="mb-4">Holiday Registration</h3>
       <form className="row col-xxl " onSubmit={handleSubmit}>
         <div className="col-md-6">
-
           <label htmlFor="holidayName" className="form-label">
             Holiday Name
           </label>
@@ -96,11 +97,13 @@ export default function HolidayForm() {
             onChange={handleChange}
             required
           />
-          {errorMsg.holidayName && <span style={{ color: "red" }}>{errorMsg.holidayName}</span>}
+          {errorMsg.holidayName && (
+            <span style={{ color: "red" }}>{errorMsg.holidayName}</span>
+          )}
         </div>
 
         <div className="col-6">
-        <label htmlFor="holidayDateTime" className="form-label">
+          <label htmlFor="holidayDateTime" className="form-label">
             Holiday Date
           </label>
           <input
@@ -112,12 +115,24 @@ export default function HolidayForm() {
             onChange={handleChange}
             required
           />
-          {errorMsg && (<span style={{ color: 'red' }}>{errorMsg.holidayDateTime}</span>)}
+          {errorMsg && (
+            <span style={{ color: "red" }}>{errorMsg.holidayDateTime}</span>
+          )}
         </div>
         <div className="p-5 text-center">
-          <button type="submit" className="btn bg-primary text-white " disabled={isSubmitDisabled}>Submit</button>
+          <button
+            type="submit"
+            className="btn bg-primary text-white "
+            disabled={isSubmitDisabled}
+          >
+            Submit
+          </button>
 
-          <button type="button" className="btn bg-danger text-white ms-3" onClick = {backbutton}>
+          <button
+            type="button"
+            className="btn bg-danger text-white ms-3"
+            onClick={backbutton}
+          >
             back
           </button>
         </div>
@@ -127,16 +142,16 @@ export default function HolidayForm() {
         <AlertMessage
           message={successMessage}
           type="success"
-          onClose={() => setSuccessMessage('')}
+          onClose={() => setSuccessMessage("")}
         />
       )}
       <style>
-      {`
+        {`
         body {
           background: linear-gradient(to right, lightblue, #ffffff);
         }
       `}
-    </style>
+      </style>
     </div>
   );
 }

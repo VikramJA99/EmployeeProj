@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../login/AuthContext";
 import AlertMessage from "../AlertMessage";
 
-
 interface EmployeeProps {
   employeeID: string;
   employeeName: string;
@@ -13,9 +12,9 @@ interface EmployeeProps {
   employeeRemarks: string;
   employeeAccruedLeaves: string;
   employeeGender: string;
-  roleName:string;
-  email:string;
-  password:string;
+  roleName: string;
+  email: string;
+  password: string;
 }
 
 export default function EmployeeForm() {
@@ -27,31 +26,32 @@ export default function EmployeeForm() {
     employeeRemarks: "",
     employeeAccruedLeaves: "",
     employeeGender: "",
-    roleName:"",
-    email:"",
-    password:"",
+    roleName: "",
+    email: "",
+    password: "",
   });
   const navigate = useNavigate();
-  const [baseUrl, SetBaseUrl] = useState("https://thaydb.vercel.app");
+  const [baseUrl, SetBaseUrl] = useState("https://thay-db.vercel.app");
 
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
   const [errorMsg, setErrorMsg] = useState<Record<string, string>>({});
-  const [successMessage, setSuccessMessage] = useState<string>('');
-  const {token} = useAuth();
-  const handleChange = (e: { target: { name: any; value: any; }; }) => {
+  const [successMessage, setSuccessMessage] = useState<string>("");
+  const { token } = useAuth();
+  const handleChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
     setEmployee({ ...employee, [name]: value });
   };
 
   const hasValidationErrors = () => {
-    const errors: Record<string, string> = {};
+    const errors: Record<string, string> = {};
 
     if (!employee.employeeName.trim()) {
       errors.employeeName = "Name cannot be empty";
     } else if (employee.employeeName.trim().length < 3) {
       errors.employeeName = "Name must have more than 4 letters";
     } else if (!/^[a-zA-Z. ]+$/.test(employee.employeeName)) {
-      errors.employeeName = "Name must be uppercase letter, lowercase letters only";
+      errors.employeeName =
+        "Name must be uppercase letter, lowercase letters only";
     }
     if (!employee.employeeID.trim()) {
       errors.employeeID = "ID cannot be empty";
@@ -74,7 +74,8 @@ export default function EmployeeForm() {
       twoMonthsAgo.setMonth(currentDate.getMonth() - 2);
 
       if (dojDate > currentDate || dojDate < twoMonthsAgo) {
-        errors.employeeDOJ = "Date of Joining must be within the last two months";
+        errors.employeeDOJ =
+          "Date of Joining must be within the last two months";
       }
     }
 
@@ -91,13 +92,14 @@ export default function EmployeeForm() {
     } else if (!/^\d+$/.test(employee.employeeAccruedLeaves.trim())) {
       errors.employeeAccruedLeaves = "Accrued Leave must be a valid number";
     } else if (parseInt(employee.employeeAccruedLeaves, 10) > 24) {
-      errors.employeeAccruedLeaves = "Accrued Leaves cannot exceed 24 days per year";
+      errors.employeeAccruedLeaves =
+        "Accrued Leaves cannot exceed 24 days per year";
     }
-    if(!employee.roleName){
-      errors.roleName = "RoleName cannot be empty"
+    if (!employee.roleName) {
+      errors.roleName = "RoleName cannot be empty";
     }
-    if(!employee.email){
-      errors.email = "Email cannot be empty"
+    if (!employee.email) {
+      errors.email = "Email cannot be empty";
     }
     setErrorMsg(errors);
 
@@ -111,34 +113,36 @@ export default function EmployeeForm() {
       console.log("Validation errors. Form not submitted.");
     } else {
       axios
-        .post(`${baseUrl}/api/employee/`, employee,{
-        headers: {
-          Authorization: `Bearer ${token}`,
-        }}
-        )
+        .post(`${baseUrl}/api/employee/`, employee, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
         .then((res) => {
           console.log(res);
-          setSuccessMessage('New employee registered successfully.'); 
+          setSuccessMessage("New employee registered successfully.");
           setTimeout(() => {
-          navigate("/DisplayEmployees");
-        }, 2000);
+            navigate("/DisplayEmployees");
+          }, 2000);
         })
         .catch((err) => console.log(err));
     }
   };
-  
+
   const backEmployee = () => {
     navigate(-1);
   };
-  
+
   useEffect(() => {
-    SetBaseUrl("https://thaydb.vercel.app");
+    SetBaseUrl("https://thay-db.vercel.app");
     setIsSubmitDisabled(hasValidationErrors());
   }, [employee]);
 
   return (
-   
-    <div className="container border rounded p-4 mt-5 " style={{ backgroundColor:'white' }} >
+    <div
+      className="container border rounded p-4 mt-5 "
+      style={{ backgroundColor: "white" }}
+    >
       <h3 className="mb-4">Employee Registration</h3>
       <form className="row col-xxl" onSubmit={handleSubmit}>
         <div className="col-md-6">
@@ -153,7 +157,9 @@ export default function EmployeeForm() {
             value={employee.employeeID}
             onChange={handleChange}
           />
-          {errorMsg.employeeID && <span style={{ color: "red" }}>{errorMsg.employeeID}</span>}
+          {errorMsg.employeeID && (
+            <span style={{ color: "red" }}>{errorMsg.employeeID}</span>
+          )}
         </div>
 
         <div className="col-md-6">
@@ -168,9 +174,11 @@ export default function EmployeeForm() {
             value={employee.employeeName}
             onChange={handleChange}
           />
-          {errorMsg.employeeName && <span style={{ color: "red" }}>{errorMsg.employeeName}</span>}
+          {errorMsg.employeeName && (
+            <span style={{ color: "red" }}>{errorMsg.employeeName}</span>
+          )}
         </div>
-        
+
         <div className="col-md-6">
           <label htmlFor="email" className="form-label">
             Email
@@ -183,7 +191,9 @@ export default function EmployeeForm() {
             value={employee.email}
             onChange={handleChange}
           />
-          {errorMsg.email && <span style={{ color: "red" }}>{errorMsg.email}</span>}
+          {errorMsg.email && (
+            <span style={{ color: "red" }}>{errorMsg.email}</span>
+          )}
         </div>
 
         <div className="col-md-6">
@@ -196,7 +206,7 @@ export default function EmployeeForm() {
             id="password"
             name="password"
             disabled
-            value={employee.password = "password@123"}
+            value={(employee.password = "password@123")}
             onChange={handleChange}
           />
         </div>
@@ -213,7 +223,9 @@ export default function EmployeeForm() {
             value={employee.employeeAge}
             onChange={handleChange}
           />
-          {errorMsg && <span style={{ color: "red" }}>{errorMsg.employeeAge}</span>}
+          {errorMsg && (
+            <span style={{ color: "red" }}>{errorMsg.employeeAge}</span>
+          )}
         </div>
         <div className="col-6">
           <label htmlFor="dateOfjoining" className="form-label">
@@ -227,7 +239,9 @@ export default function EmployeeForm() {
             value={employee.employeeDOJ}
             onChange={handleChange}
           />
-          {errorMsg && (<span style={{ color: 'red' }}>{errorMsg.employeeDOJ}</span>)}
+          {errorMsg && (
+            <span style={{ color: "red" }}>{errorMsg.employeeDOJ}</span>
+          )}
         </div>
         <div className="col-md-6">
           <label htmlFor="remark" className="form-label">
@@ -241,7 +255,9 @@ export default function EmployeeForm() {
             value={employee.employeeRemarks}
             onChange={handleChange}
           />
-          {errorMsg && (<span style={{ color: 'red' }}>{errorMsg.employeeRemarks}</span>)}
+          {errorMsg && (
+            <span style={{ color: "red" }}>{errorMsg.employeeRemarks}</span>
+          )}
         </div>
         <div className="col-md-4">
           <label htmlFor="Gender" className="form-label">
@@ -259,7 +275,9 @@ export default function EmployeeForm() {
             <option>Female</option>
             <option>Others</option>
           </select>
-          {errorMsg && (<span style={{ color: 'red' }}>{errorMsg.employeeGender}</span>)}
+          {errorMsg && (
+            <span style={{ color: "red" }}>{errorMsg.employeeGender}</span>
+          )}
         </div>
         <div className="col-md-2">
           <label htmlFor="AccruedLeaves" className="form-label">
@@ -273,7 +291,11 @@ export default function EmployeeForm() {
             value={employee.employeeAccruedLeaves}
             onChange={handleChange}
           />
-          {errorMsg && (<span style={{ color: 'red' }}>{errorMsg.employeeAccruedLeaves}</span>)}
+          {errorMsg && (
+            <span style={{ color: "red" }}>
+              {errorMsg.employeeAccruedLeaves}
+            </span>
+          )}
         </div>
         <div className="col-md-2">
           <label htmlFor="roleName" className="form-label">
@@ -292,13 +314,23 @@ export default function EmployeeForm() {
             <option>employee</option>
             <option>guest</option>
           </select>
-          {errorMsg && (<span style={{ color: 'red' }}>{errorMsg.roleName}</span>)}
-          </div>
+          {errorMsg && (
+            <span style={{ color: "red" }}>{errorMsg.roleName}</span>
+          )}
+        </div>
         <div className="p-5 text-center">
-          <button type="submit" className="btn bg-primary text-white" disabled={isSubmitDisabled}>
+          <button
+            type="submit"
+            className="btn bg-primary text-white"
+            disabled={isSubmitDisabled}
+          >
             Submit
           </button>
-          <button type="submit" className="btn bg-danger text-white ms-3" onClick = {backEmployee}>
+          <button
+            type="submit"
+            className="btn bg-danger text-white ms-3"
+            onClick={backEmployee}
+          >
             back
           </button>
         </div>
@@ -307,17 +339,16 @@ export default function EmployeeForm() {
         <AlertMessage
           message={successMessage}
           type="success"
-          onClose={() => setSuccessMessage('')}
+          onClose={() => setSuccessMessage("")}
         />
       )}
       <style>
-      {`
+        {`
         body {
           background: linear-gradient(to right, lightblue, #ffffff);
         }
       `}
-    </style>
+      </style>
     </div>
-   
   );
 }

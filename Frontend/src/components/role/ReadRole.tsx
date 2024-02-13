@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../login/AuthContext";
 
 const ReadRole = () => {
   const [data, setData] = useState<any[]>([]);
   const navigate = useNavigate();
   const [deleteId, setDeleteId] = useState(null);
-  const [baseUrl, SetBaseUrl] = useState("https://thaydb.vercel.app");
+  const [baseUrl, SetBaseUrl] = useState("https://thay-db.vercel.app");
   const { roleName, token } = useAuth();
   const isAdmin = roleName === "admin";
 
@@ -14,8 +14,8 @@ const ReadRole = () => {
     SetBaseUrl("");
     fetch(`${baseUrl}/api/roles`, {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     })
       .then((res) => res.json())
       .then((data) => {
@@ -27,34 +27,34 @@ const ReadRole = () => {
   }
   const updateRole = (id: string) => {
     navigate("/EditRole/" + id);
-  }
+  };
 
   const confirmDelete = (id: React.SetStateAction<null>) => {
     setDeleteId(id);
-  }
+  };
 
   const cancelDelete = () => {
     setDeleteId(null);
-  }
-
+  };
 
   const executeDelete = (id: string) => {
     fetch(`${baseUrl}/api/roles/` + id, {
-      method: "DELETE", headers: {
+      method: "DELETE",
+      headers: {
         Authorization: `Bearer ${token}`,
-      }
+      },
     })
       .then(() => {
         getData();
         setDeleteId(null);
       })
       .catch((err) => {
-        console.log(err.message)
+        console.log(err.message);
       });
-  }
+  };
   const AddRole = () => {
     navigate("/AddRole/");
-  }
+  };
 
   useEffect(() => {
     getData();
@@ -62,10 +62,26 @@ const ReadRole = () => {
 
   return (
     <>
-      <div className="d-flex align-items-end flex-column" style={{ backgroundImage: 'linear-gradient(to right, lightblue, #ffffff)' }}>
-        {isAdmin && <button className="btn btn-info mt-3 me-4" onClick={AddRole}> + Add Role</button>}
+      <div
+        className="d-flex align-items-end flex-column"
+        style={{
+          backgroundImage: "linear-gradient(to right, lightblue, #ffffff)",
+        }}
+      >
+        {isAdmin && (
+          <button className="btn btn-info mt-3 me-4" onClick={AddRole}>
+            {" "}
+            + Add Role
+          </button>
+        )}
       </div>
-      <div style={{ backgroundImage: 'linear-gradient(to right, lightblue, #ffffff)', minHeight: "100vh", padding: "50px" }}>
+      <div
+        style={{
+          backgroundImage: "linear-gradient(to right, lightblue, #ffffff)",
+          minHeight: "100vh",
+          padding: "50px",
+        }}
+      >
         <table className="table table-hover table-bordered table-striped text-center">
           <thead>
             <tr>
@@ -75,10 +91,7 @@ const ReadRole = () => {
               <th>Rule Rights</th>
               <th>Created Date</th>
               <th>Role Description</th>
-              {isAdmin &&
-                <th>Action</th>
-              }
-
+              {isAdmin && <th>Action</th>}
             </tr>
           </thead>
           <tbody className="table-group-divider">
@@ -90,7 +103,7 @@ const ReadRole = () => {
                 <td>{d.ruleRights}</td>
                 <td>{d.createdDate}</td>
                 <td>{d.roleDescription}</td>
-                {isAdmin &&
+                {isAdmin && (
                   <td className="d-flex justify-content-evenly">
                     <input
                       type="button"
@@ -106,7 +119,7 @@ const ReadRole = () => {
                       value="Delete"
                     />
                   </td>
-                }
+                )}
               </tr>
             ))}
           </tbody>
@@ -118,8 +131,15 @@ const ReadRole = () => {
             <div className="card-body">
               <p>Are you sure you want to delete this Employee Role?</p>
               <div className="d-flex justify-content-evenly">
-                <button className="btn btn-danger" onClick={() => executeDelete(deleteId)}>Yes</button>
-                <button className="btn btn-secondary" onClick={cancelDelete}>No</button>
+                <button
+                  className="btn btn-danger"
+                  onClick={() => executeDelete(deleteId)}
+                >
+                  Yes
+                </button>
+                <button className="btn btn-secondary" onClick={cancelDelete}>
+                  No
+                </button>
               </div>
             </div>
           </div>

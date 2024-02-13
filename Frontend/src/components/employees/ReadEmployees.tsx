@@ -14,16 +14,16 @@ const ReadEmployees: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [showChangePassword, setShowChangePassword] = useState<boolean>(false);
   const navigate = useNavigate();
-  const [successMessage, setSuccessMessage] = useState<string>('');
+  const [successMessage, setSuccessMessage] = useState<string>("");
 
   const { roleName, token } = useAuth();
   const isAdmin = roleName === "admin";
   const issuperuser = roleName === "superuser";
 
-  const [baseUrl, setBaseUrl] = useState("https://thaydb.vercel.app");
+  const [baseUrl, setBaseUrl] = useState("https://thay-db.vercel.app");
 
   useEffect(() => {
-    setBaseUrl("https://thaydb.vercel.app");
+    setBaseUrl("https://thay-db.vercel.app");
     axios
       .get(`${baseUrl}/api/employee/${id}`, {
         headers: {
@@ -97,7 +97,7 @@ const ReadEmployees: React.FC = () => {
           setShowChangePassword(false);
           setNewPassword("");
           setConfirmPassword("");
-          setSuccessMessage('Password Changed successfully.'); 
+          setSuccessMessage("Password Changed successfully.");
         })
         .catch((error) => {
           console.error("Error changing password:", error);
@@ -108,10 +108,20 @@ const ReadEmployees: React.FC = () => {
   };
 
   return (
-    <div style={{ backgroundImage: 'linear-gradient(to right, lightblue, #ffffff)', minHeight: "100vh" }}>
-      <div className="container mt-0" >
-      <div className="d-flex pt-2">
-          <FontAwesomeIcon icon={faCircleChevronLeft} onClick={backEmployee} className="me-2" size="2x" />
+    <div
+      style={{
+        backgroundImage: "linear-gradient(to right, lightblue, #ffffff)",
+        minHeight: "100vh",
+      }}
+    >
+      <div className="container mt-0">
+        <div className="d-flex pt-2">
+          <FontAwesomeIcon
+            icon={faCircleChevronLeft}
+            onClick={backEmployee}
+            className="me-2"
+            size="2x"
+          />
           <h3 className="mb-3">Employee Details</h3>
         </div>
         <div className="card">
@@ -136,19 +146,21 @@ const ReadEmployees: React.FC = () => {
               <li className="list-group-item">
                 <strong>Gender:</strong> {employee.employeeGender}
               </li>
-            {isAdmin || issuperuser && (
-              <>
-                <li className="list-group-item">
-                  <strong>Remarks:</strong> {employee.employeeRemarks}
-                </li>
-                <li className="list-group-item">
-                  <strong>Accrued Leaves:</strong> {employee.employeeAccruedLeaves}
-                </li>
-                <li className="list-group-item">
-                  <strong>Role Name:</strong> {employee.roleName}
-                </li>
-                </>
-            )}
+              {isAdmin ||
+                (issuperuser && (
+                  <>
+                    <li className="list-group-item">
+                      <strong>Remarks:</strong> {employee.employeeRemarks}
+                    </li>
+                    <li className="list-group-item">
+                      <strong>Accrued Leaves:</strong>{" "}
+                      {employee.employeeAccruedLeaves}
+                    </li>
+                    <li className="list-group-item">
+                      <strong>Role Name:</strong> {employee.roleName}
+                    </li>
+                  </>
+                ))}
             </ul>
             <div className="d-flex gap-3 ms-3 pt-3">
               {isAdmin && (
@@ -211,12 +223,12 @@ const ReadEmployees: React.FC = () => {
               </div>
             )}
             {successMessage && (
-        <AlertMessage
-          message={successMessage}
-          type="success"
-          onClose={() => setSuccessMessage('')}
-        />
-      )}
+              <AlertMessage
+                message={successMessage}
+                type="success"
+                onClose={() => setSuccessMessage("")}
+              />
+            )}
           </div>
         </div>
         {deleteId && (
@@ -225,8 +237,15 @@ const ReadEmployees: React.FC = () => {
               <div className="card-body">
                 <p>Are you sure you want to delete this employee?</p>
                 <div className="d-flex justify-content-evenly">
-                  <button className="btn btn-danger" onClick={() => executeDelete(deleteId)}>Yes</button>
-                  <button className="btn btn-secondary" onClick={cancelDelete}>No</button>
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => executeDelete(deleteId)}
+                  >
+                    Yes
+                  </button>
+                  <button className="btn btn-secondary" onClick={cancelDelete}>
+                    No
+                  </button>
                 </div>
               </div>
             </div>

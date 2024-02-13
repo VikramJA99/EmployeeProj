@@ -1,38 +1,41 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import './login.css';
-import { useAuth } from './AuthContext';
-import AlertMessage from '../AlertMessage';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import "./login.css";
+import { useAuth } from "./AuthContext";
+import AlertMessage from "../AlertMessage";
 
 const Login: React.FC = () => {
-  const [email, setemail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const [email, setemail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false); // State to toggle password visibility
-  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const navigate = useNavigate();
   const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
-      setErrorMessage('Please enter both email and password.');
+      setErrorMessage("Please enter both email and password.");
       return;
     }
 
     try {
-      const response = await fetch('https://thaydb.vercel.app/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
+      const response = await fetch(
+        "https://thay-db.vercel.app/api/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -42,10 +45,10 @@ const Login: React.FC = () => {
 
       login(data.token);
 
-      navigate('/');
+      navigate("/");
     } catch (error) {
-      console.error('Error during login:', error);
-      setErrorMessage('Incorrect email or password');
+      console.error("Error during login:", error);
+      setErrorMessage("Incorrect email or password");
     }
   };
 
@@ -65,7 +68,7 @@ const Login: React.FC = () => {
                 value={email}
                 onChange={(e) => {
                   setemail(e.target.value);
-                  setErrorMessage('');
+                  setErrorMessage("");
                 }}
               />
             </div>
@@ -74,13 +77,13 @@ const Login: React.FC = () => {
               <label>Password</label>
               <div className="input-group">
                 <input
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   className="form-control"
                   placeholder="Enter password"
                   value={password}
                   onChange={(e) => {
                     setPassword(e.target.value);
-                    setErrorMessage('');
+                    setErrorMessage("");
                   }}
                 />
                 <button
@@ -88,7 +91,11 @@ const Login: React.FC = () => {
                   className="btn btn-outline-secondary"
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  {showPassword ? <FontAwesomeIcon icon={faEyeSlash} /> : <FontAwesomeIcon icon={faEye} />}
+                  {showPassword ? (
+                    <FontAwesomeIcon icon={faEyeSlash} />
+                  ) : (
+                    <FontAwesomeIcon icon={faEye} />
+                  )}
                 </button>
               </div>
             </div>
@@ -100,7 +107,7 @@ const Login: React.FC = () => {
 
             <p className="forgot-password text-right">
               New Registration
-              <Link className="link ms-1" to={'/signup'}>
+              <Link className="link ms-1" to={"/signup"}>
                 Sign Up
               </Link>
             </p>
@@ -109,7 +116,7 @@ const Login: React.FC = () => {
             <AlertMessage
               message={errorMessage}
               type="error"
-              onClose={() => setErrorMessage('')}
+              onClose={() => setErrorMessage("")}
             />
           )}
         </div>

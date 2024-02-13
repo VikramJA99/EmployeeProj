@@ -11,7 +11,7 @@ const AttendanceRecord = () => {
   const [shouldFetchDefault, setShouldFetchDefault] = useState(false);
   const { token } = useAuth();
 
-  const Backend = `https://thaydb.vercel.app`;
+  const Backend = `https://thay-db.vercel.app`;
   const defaultUrl = `${Backend}/api/time`;
 
   const constructUrl = () => {
@@ -39,11 +39,12 @@ const AttendanceRecord = () => {
 
     const url = constructUrl();
 
-    axios.get(url, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      }
-    })
+    axios
+      .get(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
         setData(response.data);
       })
@@ -62,11 +63,12 @@ const AttendanceRecord = () => {
 
   useEffect(() => {
     if (shouldFetchDefault) {
-      axios.get(defaultUrl, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      axios
+        .get(defaultUrl, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
         .then((response) => {
           setData(response.data);
           setShouldFetchDefault(false);
@@ -83,31 +85,41 @@ const AttendanceRecord = () => {
 
   return (
     <>
-
       <div style={{ padding: "50px" }}>
         <div className="search-section d-flex gap-1">
           <input
             type="text"
             placeholder="Enter Employee ID"
-            value={searchEmployeeID || ''}
+            value={searchEmployeeID || ""}
             onChange={(e) => setSearchEmployeeID(Number(e.target.value))}
           />
           <input
             type="date"
             placeholder="Start Date"
-            value={startDate || ''}
+            value={startDate || ""}
             onChange={(e) => setStartDate(e.target.value)}
           />
           <input
             type="date"
             placeholder="End Date"
-            value={endDate || ''}
+            value={endDate || ""}
             onChange={(e) => setEndDate(e.target.value)}
           />
-          <button onClick={handleSearch} className="btn btn-primary ms-2">search</button>
-          <button onClick={clearSearchCriteria} className="btn btn-secondary ms-2">Clear</button>
+          <button onClick={handleSearch} className="btn btn-primary ms-2">
+            search
+          </button>
+          <button
+            onClick={clearSearchCriteria}
+            className="btn btn-secondary ms-2"
+          >
+            Clear
+          </button>
         </div>
-        {errorMessage && <div className="mt-2" style={{ color: "red" }}>{errorMessage}</div>}
+        {errorMessage && (
+          <div className="mt-2" style={{ color: "red" }}>
+            {errorMessage}
+          </div>
+        )}
 
         <table className="table table-hover table-bordered table-striped text-center mt-4">
           <thead>
@@ -134,8 +146,7 @@ const AttendanceRecord = () => {
         <style>
           {`body {  background: linear-gradient(to right, lightblue, #ffffff);`}
         </style>
-      </div >
-
+      </div>
     </>
   );
 };
